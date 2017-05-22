@@ -1,0 +1,17 @@
+page-home {
+  .cards-bg {
+    background: #f2f2f2;
+  }
+  .profile-pic {
+    border-radius: 50%;
+    margin:-43px 0px 14px 11px;
+    width: 70px;
+    box-shadow: 1px 5px 11px 1px #000000;
+  }
+  .header-md::after,
+  .tabs-md[tabsPlacement="top"]>.tabbar::after,
+  .footer-md::before,
+  .tabs-md[tabsPlacement="bottom"]>.tabbar::before {
+    background: none;
+  }
+}

@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      {{video?video.snippet.title + ' Videos':'View Video'}}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <youtube-player [playerVars]="playerVars" [width]="'100%'" [protocol]="'https'" [videoId]="video.id.videoId" (ready)="savePlayer($event)" (change)="onStateChange($event)"></youtube-player>
+    <ion-card-content>
+      <p>
+        {{video.snippet.description}}
+      </p>
+    </ion-card-content>
+    <ion-row no-padding>
+      <ion-col>
+        <button ion-button clear small color="danger" icon-left>
+          <ion-icon name='star'></ion-icon>
+          Favorite
+        </button>
+      </ion-col>
+
+      <ion-col text-right>
+        <button ion-button clear small color="danger" icon-left>
+          <ion-icon name='share-alt'></ion-icon>
+          Share
+        </button>
+      </ion-col>
+    </ion-row>
+
+  </ion-card>
+</ion-content>

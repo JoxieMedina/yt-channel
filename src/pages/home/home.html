@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-navbar no-padding color="no">
+    <img [src]="channelInfo?channelInfo.brandingSettings.image.bannerImageUrl:''" alt="Banner">
+    <img class="profile-pic" [src]="channelInfo?channelInfo.snippet.thumbnails.default.url:''" alt="Profile">
+
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content class="cards-bg">
+  <ion-fab top right edge>
+    <button ion-fab mini><ion-icon name="more"></ion-icon></button>
+    <ion-fab-list>
+      <button ion-fab><ion-icon name="information-circle"></ion-icon></button>
+      <button ion-fab><ion-icon name="star"></ion-icon></button>
+    </ion-fab-list>
+  </ion-fab>
+
+  <ion-card *ngFor="let video of videos">
+
+    <img [src]="video.snippet.thumbnails.high.url" />
+
+    <ion-card-content>
+      <ion-card-title>
+        {{video.snippet.title}}
+      </ion-card-title>
+      <p>
+        {{video.snippet.description}}
+      </p>
+    </ion-card-content>
+
+    <ion-row no-padding>
+      <ion-col>
+        <button ion-button clear small color="danger" icon-left>
+          <ion-icon name='star'></ion-icon>
+          Favorite
+        </button>
+      </ion-col>
+      <ion-col text-center>
+        <button (click)="viewVideo(video)" ion-button clear small color="danger" icon-left>
+          <ion-icon name='play'></ion-icon>
+          View
+        </button>
+      </ion-col>
+      <ion-col text-right>
+        <button ion-button clear small color="danger" icon-left>
+          <ion-icon name='share-alt'></ion-icon>
+          Share
+        </button>
+      </ion-col>
+    </ion-row>
+
+  </ion-card>
+
+  <button *ngIf="pageToken" ion-button full color="primary" (click)="loadMore()" icon-right>
+          Load More
+          <ion-icon name='download'></ion-icon>
+        </button>
+
+
+</ion-content>
