@@ -5,7 +5,7 @@
   </ion-navbar> -->
   <shrinking-segment-header [style.background]="bannerUrl?bannerUrl:'#363636'" [scrollArea]="myContent" headerHeight="150"
     headerMinHeight="53" (heightUpdated)="handleHeight($event)">
-    <div [class]="headerState == 'active'? 'profile-pic active':'profile-pic'" >
+    <div [class]="headerState == 'active'? 'profile-pic active':'profile-pic'" > <!--<div class="profile-pic" [@expandHeader]="headerState">-->
       <img [src]="channelInfo?channelInfo.snippet.thumbnails.default.url:''" alt="Profile">
     </div>
     <ion-fab bottom right edge>

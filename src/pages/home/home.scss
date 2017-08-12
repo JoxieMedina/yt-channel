@@ -2,31 +2,40 @@ page-home {
   .cards-bg {
     background: #f2f2f2;
   }
+
   .profile-pic {
-    box-shadow: 0 0.5px 20px 0 rgba(230, 33, 23, 0.4);
+    // box-shadow: 0 0.5px 20px 0 rgba(230, 33, 23, 0.4);
     border-radius: 15px;
     width: 50px;
     text-align: center;
-    background: white;
-    transition: all 2s;
+    height: 50px;
+    background: transparent;
+    transition: all .5s cubic-bezier(0.6, -0.28, 0.74, 0.05);
+
     img {
       border-radius: 50%;
+      box-shadow: 0 0.5px 20px 0 rgba(230, 33, 23, 0.4);
       width: auto;
       height: 50px;
     }
   }
 
-   .active {
+  .active {
     border-radius: 0px;
+    box-shadow: 0 0.5px 20px 0 rgba(230, 33, 23, 0.4);
+    background: white;
+    height: 100%;
     width: 100%;
-    transition: all 2s;
+    transition: all .5s cubic-bezier(0.6, -0.28, 0.74, 0.05);
   }
+
   .header-md::after,
   .tabs-md[tabsPlacement="top"]>.tabbar::after,
   .footer-md::before,
   .tabs-md[tabsPlacement="bottom"]>.tabbar::before {
     background: none;
   }
+
   shrinking-segment-header {
     color: #fff;
     display: flex;

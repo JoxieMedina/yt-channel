@@ -1,17 +1,22 @@
-import {Component} from "@angular/core";
-import {NavParams, Events} from "ionic-angular";
-
+import { Component } from "@angular/core";
+import { NavParams, Events } from "ionic-angular";
+import { YouTubeApi } from '../../shared/youtubeapi.service'
 declare var YT;
 
-@Component({selector: 'page-video', templateUrl: './video.page.html'})
+@Component({ selector: 'page-video', templateUrl: './video.page.html' })
 
 export class VideoPage {
-  video : object;
+  video: any;
   private player;
   private ytEvent;
-  playerVars : object;
-  constructor(public params : NavParams, public events : Events) {
+  playerVars: object;
+  constructor(public params: NavParams, public events: Events, public ytApi: YouTubeApi) {
     this.video = params.data;
+    console.log(this.video)
+
+    this.ytApi.getVideoComments(this.video.id.videoId).then(comments => {
+      console.dir(comments)
+    })
     /**
      * view all the params
      * https://developers.google.com/youtube/player_parameters

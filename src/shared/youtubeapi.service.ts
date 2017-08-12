@@ -2,8 +2,8 @@ import {Http, Response} from "@angular/http";
 import {Injectable} from "@angular/core";
 
 const URL_BASE = 'https://www.googleapis.com/youtube/v3/';
-const YT_API_KEY = 'AIzaSyB7J_h33kFqxlDb_VpayCLfyVlLj9LwXwI';
-const CHANNEL_ID = 'UChYheBnVeCfhCmqZfCUdJQw';//UChYheBnVeCfhCmqZfCUdJQw
+const YT_API_KEY = 'YOUR-KEY-HERE';
+const CHANNEL_ID = 'UClKO7be7O9cUGL94PHnAeOA';//UChYheBnVeCfhCmqZfCUdJQw
 
 @Injectable()
 
@@ -57,6 +57,19 @@ export class YouTubeApi {
       this
         .http
         .get(`${URL_BASE}search?order=date&part=id,snippet&channelId=${CHANNEL_ID}&pageToken=${pageToken}&key=${YT_API_KEY}`)
+        .subscribe((res : Response) => resolve(res.json()), err => reject(err));
+    })
+  }
+
+   /**
+   *
+   * @param videoId the id of the video get the comments
+   */
+  getVideoComments(videoId) {
+    return new Promise((resolve, reject) => {
+      this
+        .http
+        .get(`${URL_BASE}commentThreads?part=snippet&videoId=${videoId}&maxResults=10&order=relevance&key=${YT_API_KEY}`)
         .subscribe((res : Response) => resolve(res.json()), err => reject(err));
     })
   }

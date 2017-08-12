@@ -20,7 +20,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp, HomePage, VideoPage
+    MyApp, HomePage, VideoPage,ShrinkingSegmentHeader
   ],
   providers: [
     StatusBar,
