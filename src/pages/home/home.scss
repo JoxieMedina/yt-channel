@@ -3,15 +3,34 @@ page-home {
     background: #f2f2f2;
   }
   .profile-pic {
-    border-radius: 50%;
-    margin:-43px 0px 14px 11px;
-    width: 70px;
-    box-shadow: 1px 5px 11px 1px #000000;
+    box-shadow: 0 0.5px 20px 0 rgba(230, 33, 23, 0.4);
+    border-radius: 15px;
+    width: 50px;
+    text-align: center;
+    background: white;
+    transition: all 2s;
+    img {
+      border-radius: 50%;
+      width: auto;
+      height: 50px;
+    }
+  }
+
+   .active {
+    border-radius: 0px;
+    width: 100%;
+    transition: all 2s;
   }
   .header-md::after,
   .tabs-md[tabsPlacement="top"]>.tabbar::after,
   .footer-md::before,
   .tabs-md[tabsPlacement="bottom"]>.tabbar::before {
     background: none;
+  }
+  shrinking-segment-header {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

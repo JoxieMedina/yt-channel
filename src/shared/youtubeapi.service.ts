@@ -2,7 +2,7 @@ import {Http, Response} from "@angular/http";
 import {Injectable} from "@angular/core";
 
 const URL_BASE = 'https://www.googleapis.com/youtube/v3/';
-const YT_API_KEY = 'AIzaSyBQtmWKpDfN0KS7FQW68WbGKzQX17V5fAY';
+const YT_API_KEY = 'AIzaSyB7J_h33kFqxlDb_VpayCLfyVlLj9LwXwI';
 const CHANNEL_ID = 'UChYheBnVeCfhCmqZfCUdJQw';//UChYheBnVeCfhCmqZfCUdJQw
 
 @Injectable()
