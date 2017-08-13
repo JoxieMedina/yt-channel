@@ -8,7 +8,8 @@
 
 <ion-content>
   <ion-card>
-    <youtube-player [playerVars]="playerVars" [width]="'100%'" [protocol]="'https'" [videoId]="video.id.videoId" (ready)="savePlayer($event)" (change)="onStateChange($event)"></youtube-player>
+    <youtube-player [playerVars]="playerVars" [width]="'100%'" [protocol]="'https'" [videoId]="video.id.videoId" (ready)="savePlayer($event)"
+      (change)="onStateChange($event)"></youtube-player>
     <ion-card-content>
       <p>
         {{video.snippet.description}}
@@ -32,3 +33,13 @@
 
   </ion-card>
 </ion-content>
+<ion-footer>
+  <button ion-button full color="primary" (click)="doLogin()" icon-right>
+    Login
+    <ion-icon name='logo-googleplus'></ion-icon>
+  </button>
+   <button ion-button full color="primary" (click)="doComment()" icon-right>
+    Generic Comment
+    <ion-icon name='md-chatbubbles'></ion-icon>
+  </button>
+</ion-footer>

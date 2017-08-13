@@ -5,7 +5,8 @@
   </ion-navbar> -->
   <shrinking-segment-header [style.background]="bannerUrl?bannerUrl:'#363636'" [scrollArea]="myContent" headerHeight="150"
     headerMinHeight="53" (heightUpdated)="handleHeight($event)">
-    <div [class]="headerState == 'active'? 'profile-pic active':'profile-pic'" > <!--<div class="profile-pic" [@expandHeader]="headerState">-->
+    <div [class]="headerState == 'active'? 'profile-pic active':'profile-pic'">
+      <!--<div class="profile-pic" [@expandHeader]="headerState">-->
       <img [src]="channelInfo?channelInfo.snippet.thumbnails.default.url:''" alt="Profile">
     </div>
     <ion-fab bottom right edge>
@@ -23,18 +24,24 @@
 <ion-content class="cards-bg" fullscreen #myContent>
 
 
-  <ion-card *ngFor="let video of videos">
-
+  <!-- <ion-card *ngFor="let video of videos">
+    <div (click)="viewVideo(video)" class="play-container">
+      <ion-icon name='play'></ion-icon>
+    </div>
     <img [src]="video.snippet.thumbnails.high.url" />
-
-    <ion-card-content>
+    <ion-fab right top>
+      <button ion-fab>
+      <ion-icon name="pin"></ion-icon>
+    </button>
+    </ion-fab>
+    <ion-item>
       <ion-card-title>
         {{video.snippet.title}}
       </ion-card-title>
       <p>
         {{video.snippet.description}}
       </p>
-    </ion-card-content>
+    </ion-item>
 
     <ion-row no-padding>
       <ion-col>
@@ -43,12 +50,7 @@
           Favorite
         </button>
       </ion-col>
-      <ion-col text-center>
-        <button (click)="viewVideo(video)" ion-button clear small color="danger" icon-left>
-          <ion-icon name='play'></ion-icon>
-          View
-        </button>
-      </ion-col>
+
       <ion-col text-right>
         <button ion-button clear small color="danger" icon-left>
           <ion-icon name='share-alt'></ion-icon>
@@ -57,12 +59,41 @@
       </ion-col>
     </ion-row>
 
+  </ion-card> -->
+  <ion-card *ngFor="let video of videos">
+    <div style="position: relative">
+      <img [src]="video.snippet.thumbnails.high.url">
+      <ion-fab left bottom edge>
+        <button (click)="viewVideo(video)" ion-fab>
+          <ion-icon name="play"></ion-icon>
+        </button>
+      </ion-fab>
+    </div>
+    <ion-item>
+      <ion-icon name="quote" item-start small></ion-icon>
+      <h2 style="    white-space: normal;" > {{video.snippet.title}}</h2>
+      <p style="    white-space: normal;" >{{video.snippet.description}}</p>
+    </ion-item>
+
+
+
+    <ion-item>
+      <button ion-button icon-left clear item-left>
+        <ion-icon name="star"></ion-icon>
+        Favorite
+      </button>
+      <button ion-button icon-left clear item-end>
+        <ion-icon name="share-alt"></ion-icon>
+        Share
+      </button>
+    </ion-item>
+
   </ion-card>
 
   <button *ngIf="pageToken" ion-button full color="primary" (click)="loadMore()" icon-right>
-          Load More
-          <ion-icon name='download'></ion-icon>
-        </button>
+    Load More
+    <ion-icon name='download'></ion-icon>
+  </button>
 
 
 </ion-content>

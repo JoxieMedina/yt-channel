@@ -1,15 +1,34 @@
-import {Http, Response} from "@angular/http";
+import {Http, Response, Headers, RequestOptions} from "@angular/http";
 import {Injectable} from "@angular/core";
-
-const URL_BASE = 'https://www.googleapis.com/youtube/v3/';
-const YT_API_KEY = 'YOUR-KEY-HERE';
-const CHANNEL_ID = 'UClKO7be7O9cUGL94PHnAeOA';//UChYheBnVeCfhCmqZfCUdJQw
+import {Platform} from 'ionic-angular';
+import * as CONSTANTS from "./constants";
+import {NativeStorage} from '@ionic-native/native-storage';
 
 @Injectable()
 
 export class YouTubeApi {
+  private credentials : any;
+  private ytProfile : any;
+  constructor(public http : Http, private nativeStorage : NativeStorage, platform : Platform) {
+    platform
+      .ready()
+      .then(() => {
+        this
+          .nativeStorage
+          .getItem('yt_credentials')
+          .then(data => {
+            this.credentials = data;
+          }, error => console.error(error));
 
-  constructor(public http : Http) {}
+        this
+          .nativeStorage
+          .getItem('yt_profile')
+          .then(data => {
+            this.ytProfile = data;
+          }, error => console.error(error));
+      })
+
+  }
   /**
  * Look more api options here https://developers.google.com/youtube/v3/docs/
  */
@@ -18,7 +37,7 @@ export class YouTubeApi {
     return new Promise((resolve, reject) => {
       this
         .http
-        .get(`${URL_BASE}channels?part=snippet,brandingSettings,statistics&id=${CHANNEL_ID}&key=${YT_API_KEY}`)
+        .get(`${CONSTANTS.URL_BASE}channels?part=snippet,brandingSettings,statistics&id=${CONSTANTS.CHANNEL_ID}&key=${CONSTANTS.YT_API_KEY}`)
         .subscribe((res : Response) => resolve(res.json()), err => reject(err));
     })
   }
@@ -31,7 +50,7 @@ export class YouTubeApi {
     return new Promise((resolve, reject) => {
       this
         .http
-        .get(`${URL_BASE}search?order=date&part=id,snippet&channelId=${channelId}&key=${YT_API_KEY}`)
+        .get(`${CONSTANTS.URL_BASE}search?order=date&part=id,snippet&channelId=${channelId}&key=${CONSTANTS.YT_API_KEY}`)
         .subscribe((res : Response) => resolve(res.json()), err => reject(err));
     })
   }
@@ -43,7 +62,7 @@ export class YouTubeApi {
     return new Promise((resolve, reject) => {
       this
         .http
-        .get(`${URL_BASE}search?order=date&part=id,snippet&channelId=${CHANNEL_ID}&key=${YT_API_KEY}`)
+        .get(`${CONSTANTS.URL_BASE}search?order=date&part=id,snippet&channelId=${CONSTANTS.CHANNEL_ID}&key=${CONSTANTS.YT_API_KEY}`)
         .subscribe((res : Response) => resolve(res.json()), err => reject(err));
     })
   }
@@ -56,12 +75,12 @@ export class YouTubeApi {
     return new Promise((resolve, reject) => {
       this
         .http
-        .get(`${URL_BASE}search?order=date&part=id,snippet&channelId=${CHANNEL_ID}&pageToken=${pageToken}&key=${YT_API_KEY}`)
+        .get(`${CONSTANTS.URL_BASE}search?order=date&part=id,snippet&channelId=${CONSTANTS.CHANNEL_ID}&pageToken=${pageToken}&key=${CONSTANTS.YT_API_KEY}`)
         .subscribe((res : Response) => resolve(res.json()), err => reject(err));
     })
   }
 
-   /**
+  /**
    *
    * @param videoId the id of the video get the comments
    */
@@ -69,9 +88,103 @@ export class YouTubeApi {
     return new Promise((resolve, reject) => {
       this
         .http
-        .get(`${URL_BASE}commentThreads?part=snippet&videoId=${videoId}&maxResults=10&order=relevance&key=${YT_API_KEY}`)
+        .get(`${CONSTANTS.URL_BASE}commentThreads?part=snippet&videoId=${videoId}&maxResults=10&order=relevance&key=${CONSTANTS.YT_API_KEY}`)
         .subscribe((res : Response) => resolve(res.json()), err => reject(err));
     })
   }
 
+  /**
+   * @param videoId the id of the video to comment
+   * @param content the comment text
+  */
+
+  doComment(videoId, accessToken, content) {
+    return new Promise((resolve, reject) => {
+      this
+        .http
+        .post(`${CONSTANTS.URL_BASE}commentThreads?part=snippet&key=${CONSTANTS.YT_API_KEY}&access_token=${accessToken}`, {
+          "snippet": {
+            "channelId": CONSTANTS.CHANNEL_ID,
+            "topLevelComment": {
+              "snippet": {
+                "textOriginal": content
+              }
+            },
+            "videoId": videoId
+          }
+        })
+        .subscribe((res : Response) => resolve(res.json()), err => reject(err));
+    })
+  }
+
+  /**
+   *
+   * @param serverAuthCode the server auth code that we gotten in the login
+   */
+  getAccessToken(serverAuthCode) {
+    let headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'});
+    let options = new RequestOptions({headers: headers, withCredentials: true}); // Create a request option
+    let serialized = this.serializeObj({code: serverAuthCode, client_secret: CONSTANTS.SECRET_CLIENT, grant_type: 'authorization_code', client_id: CONSTANTS.CLIENT_ID});
+    return new Promise((resolve, reject) => {
+      this
+        .http
+        .post(CONSTANTS.URL_TOKEN, serialized, options)
+        .subscribe((res : Response) => resolve(res.json()), err => reject(err));
+    })
+  }
+
+  /**
+   *
+   * @param refreshToken the refresh_token stored from the last login
+   */
+  refreshAccessToken(refreshToken) {
+    let headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'});
+    let options = new RequestOptions({headers: headers, withCredentials: true}); // Create a request option
+    let serialized = this.serializeObj({refresh_token: refreshToken, client_secret: CONSTANTS.SECRET_CLIENT, grant_type: 'refresh_token', client_id: CONSTANTS.CLIENT_ID});
+    return new Promise((resolve, reject) => {
+      this
+        .http
+        .post(CONSTANTS.URL_TOKEN, serialized, options)
+        .subscribe((res : Response) => resolve(res.json()), err => reject(err));
+    })
+  }
+
+  serializeObj(obj) {
+    var result = [];
+    for (var property in obj)
+      result.push(encodeURIComponent(property) + "=" + encodeURIComponent(obj[property]));
+    return result.join("&");
+  }
+
+  /**
+ *
+ * @param toSave the credentials object to save in the device
+ */
+
+  storeProfile(toSave) {
+    this
+      .nativeStorage
+      .setItem('yt_profile', toSave)
+      .then(() => console.log('Stored item!'), error => console.error('Error storing item', error));
+  }
+
+  getStoredProfile() {
+    return this.ytProfile;
+  }
+
+  /**
+ *
+ * @param toSave the credentials object to save in the device
+ */
+
+  storeCredentials(toSave) {
+    this
+      .nativeStorage
+      .setItem('yt_credentials', toSave)
+      .then(() => console.log('Stored item!'), error => console.error('Error storing item', error));
+  }
+
+  getStoredCredentials() {
+    return this.credentials;
+  }
 }

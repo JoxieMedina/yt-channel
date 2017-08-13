@@ -10,6 +10,8 @@ import {MyApp} from './app.component';
 import {HomePage, VideoPage} from '../pages/pages';
 import {ShrinkingSegmentHeader} from '../components/shrinking-segment-header/shrinking-segment-header';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {GooglePlus} from '@ionic-native/google-plus';
+import {NativeStorage} from '@ionic-native/native-storage';
 
 @NgModule({
   declarations: [
@@ -20,11 +22,13 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp, HomePage, VideoPage,ShrinkingSegmentHeader
+    MyApp, HomePage, VideoPage, ShrinkingSegmentHeader
   ],
   providers: [
     StatusBar,
     SplashScreen,
+    GooglePlus,
+    NativeStorage,
     YouTubeApi, {
       provide: ErrorHandler,
       useClass: IonicErrorHandler
